@@ -6,7 +6,6 @@ import java.util.List;
 
 public class StudentAnalyzerTest {
     StudentAnalyzer analyzer = new StudentAnalyzer();
-
     @Test
     public void testCountExcellentStudents() {
 
