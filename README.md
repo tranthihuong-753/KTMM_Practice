@@ -1,54 +1,64 @@
-# Student Analyzer - Unit Test Java
+# JMeter Performance Test – Reddit
 
-## Mục tiêu
-Bài tập này nhằm mục đích:
+## Website
+https://www.reddit.com
 
-1. Rèn luyện kỹ năng viết **hàm Java xử lý dữ liệu**.  
-2. Viết **Unit Test bằng JUnit 5** để kiểm thử chức năng:  
-   - Đếm số học sinh đạt loại Giỏi (>=8.0).  
-   - Tính điểm trung bình hợp lệ (từ 0 đến 10).  
-3. Hiểu cách xử lý các **trường hợp đặc biệt**:  
-   - Danh sách rỗng  
-   - Điểm không hợp lệ (<0 hoặc >10)  
-   - Giá trị biên (0 hoặc 10)  
+## Công cụ
+Apache JMeter
 
 ---
 
-## Cấu trúc dự án
+# Thread Group 1 – Basic Scenario
 
-/src/StudentAnalyzer.java
+Users: 10  
+Ramp-up: 10s  
+Loop Count: 5  
 
-/test/StudentAnalyzerTest.java
+Action:
+GET /
 
-## Kết quả 
+Result:
 
-[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.502 s -- in com.example.demo.DemoApplicationTests
+- Response Time: ~5517 ms
+- Throughput: ~1.29257 request/sec
+- Error Rate: 55.257%
 
-[INFO] Running StudentAnalyzerTest
+---
 
-[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.020 s -- in StudentAnalyzerTest
+# Thread Group 2 – Heavy Load
 
-[INFO] 
+Users: 50  
+Ramp-up: 30s  
 
-[INFO] Results:
+Action:
 
-[INFO]
+GET /  
+GET /r/popular
 
-[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+Result:
 
-[INFO]
+- Response Time: ~5560 ms
+- Throughput: ~1.46040 request/sec
+- Error Rate: ~69.088%
 
-[INFO] 
-------------------------------------------------------------------------  
+Một số request trả về HTTP 429 (Too Many Requests) do Reddit áp dụng rate limiting.
 
-[INFO] BUILD SUCCESS
+---
 
-[INFO] 
-------------------------------------------------------------------------  
+# Thread Group 3 – Custom Scenario
 
-[INFO] Total time:  6.736 s
+Users: 20  
+Duration: 60s  
 
-[INFO] Finished at: 2026-01-11T19:45:54+07:00
+Action:
 
-[INFO] 
-----------------------------------------------------------------
+GET /explore
+GET /?feed=news
+
+Result:
+
+- Response Time: ~5535 ms
+- Throughput: ~1.35230 request/sec
+- Error Rate: ~67.414%
+
+---
